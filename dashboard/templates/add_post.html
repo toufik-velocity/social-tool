@@ -1,0 +1,15 @@
+{% extends 'dashbase.html' %}
+{% block content %}
+
+<!-- my_form.html -->
+<div class="preview-post-container">
+    <div class="form-title">Add Manual Entry</div>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-field">
+            {{ form.as_p }}
+        </div>
+        <button class="add-button" type="submit">Submit</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'authbase.html' %}
+{% block content %}
+<div class="login-wrap p-4 p-md-5">
+	<div class="d-flex">
+		<div class="w-100">
+			<h3 class="mb-4">Sign Up</h3>
+		</div>
+
+	</div>
+	<form class="signin-form" method="POST">
+		{% csrf_token %}
+		{% include 'includes/messages.html' %}
+		<div class="form-group mb-3">
+			<label class="label" for="name">Username</label>
+			<input type="text" class="form-control" name="username" placeholder="Username" required="">
+		</div>
+		<div class="form-group mb-3">
+			<label class="label" for="name">Email</label>
+			<input type="email" class="form-control" name="email" placeholder="Email" required="">
+		</div>
+		<div class="form-group mb-3">
+			<label class="label" for="password">Password</label>
+			<input type="password" class="form-control" name="password1" placeholder="Password" required="">
+		</div>
+		<div class="form-group mb-3">
+			<label class="label" for="password">Confirm</label>
+			<input type="password" class="form-control" name="password2" placeholder="Password" required="">
+		</div>
+		<div class="form-group">
+			<button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign Up</button>
+		</div>
+	</form>
+		<p class="text-center">A member? <a data-toggle="tab" href="{% url 'signin' %}">Sign In</a></p>
+</div>
+{% endblock %}

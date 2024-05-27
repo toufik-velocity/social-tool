@@ -1,0 +1,18 @@
+{% extends 'dashbase.html' %}
+{% block content %}
+<div style="margin: 20px;">
+
+    <!-- my_form.html -->
+    <div class="preview-post-container">
+        <div class="form-title">Edit Post Frequency</div>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-field">
+                <label for="frequency">Frequency in hrs:</label>
+                <input type="number" min="0" step="1" placeholder="eg 1" name="frequency" required />
+            </div>
+            <button class="save-update-button" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

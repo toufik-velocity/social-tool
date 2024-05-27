@@ -1,0 +1,282 @@
+<!-- {% extends 'dashbase.html' %}
+{% block content %}
+{% load static %}
+<div> -->
+    <!-- <div class="search-bar">
+        <form class="form" action="{% url 'search_results' %}" method="get">
+            <div class="form-field">
+                <label for="username">Username:</label>
+                <input type="text" placeholder="eg Geoffrey Peter" name="username">
+            </div>
+            <div class="form-field">
+                <label for="likes">Likes:</label>
+                <input type="number" min="0" step="1" placeholder="eg 10000" value=0 name="likes">
+            </div>
+            <div class="form-field">
+                <label for="comments">Comments:</label>
+                <input type="number" min="0" step="1" placeholder="eg 10000" value=0 name="comments">
+            </div>
+            <div class="form-field">
+                <label for="shares">Shares:</label>
+                <input type="number" min="0" step="1" placeholder="eg 10000" value=0 name="shares">
+            </div>
+            <div class="form-field">
+                <label for="post_date">Post Date:</label>
+                <input type="date" class="form-control" name="post_date" pattern="\d{4}-\d{2}-\d{2}">
+            </div>
+            <button class="search main-btn" type="submit">Search</button>
+        </form>
+    </div> -->
+    <!-- <div class="home-alert">
+        {% include 'includes/alerts.html' %}
+    </div>
+    <div class="tpContainer">
+        <div class="tpHeading">
+            <span>Tracked Posts</span>
+        </div>
+        {% for post in posts %}
+        <div class="tpCard">
+            <div class="tpCardColumn">
+                <div class="tpTopRow">
+                    <div class="tpUsername">
+                        <span>{{post.username}}</span>
+                    </div>
+                    <div class="tpPlatformIcon">
+                        {%if post.platform_id == '1' %}<ion-icon class="logo-icon" name="logo-facebook"
+                            style="color: #3b5998"></ion-icon>
+                        {% elif post.platform_id == '2' %}<ion-icon class="logo-icon" name="logo-twitter"
+                            style="color :#00acee"></ion-icon>
+                        {% else %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="tpType">
+                    <span>Content Type: {{post.content_type}}</span>
+                </div>
+                <div class="tpSentiment">
+                    <span class="sentimentText" data-positive-score="{{ post.positive_score }}"
+                        data-negative-score="{{ post.negative_score }}" data-neutral-score="{{ post.neutral_score }}">
+                        {% if post.positive_score > post.negative_score and post.positive_score > post.neutral_score %}
+                        Overall Positive Sentiment
+                        {% elif post.negative_score > post.positive_score and post.negative_score > post.neutral_score
+                        %}
+                        Overall Negative Sentiment
+                        {% else %}
+                        Overall Neutral Sentiment
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="tpBottomRow">
+                    <div class="tpStats">
+                        <ion-icon name="heart"></ion-icon>
+                        {% with last_like=post.likes|last %}
+                        <span>{{ last_like.value}} Likes</span>
+                        {% endwith %}
+                    </div>
+                    <div class="tpStats">
+                        <ion-icon name="chatbox"></ion-icon>
+                        {% with last_like=post.num_comments|last %}
+                        <span>{{ last_like.value}} Comments</span>
+                        {% endwith %}
+                    </div>
+                    <div class="tpStats">
+                        <ion-icon name="share-social"></ion-icon>
+                        {% with last_like=post.likes|last %}
+                        <span>{{ last_like.value}} Shares</span>
+                        {% endwith %}
+                    </div>
+                    <a>
+                        <ion-icon name="eye-outline"></ion-icon>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %} -->
+
+    <!-- </div>
+    <div class="searchContainer">
+        <div class="searchBar">
+            <ion-icon name="search-outline"></ion-icon>
+            <input type="text" placeholder="Search username">
+            <button type="submit">
+                <ion-icon name="send"></ion-icon>
+            </button>
+        </div> -->
+        <!-- <span style="text-decoration: underline;">Apply Filters</span>
+         -->
+        <!-- <button class="filter-button" onclick="toggleMenu()">Filters</button>
+        <div class="filter-menu" id="filterMenu"> -->
+            <!-- Options for the user to select -->
+            <!-- <ul>
+                <li>
+                    <label for="likesRange">Likes</label>
+                    <input type="range" id="likesRange" min="0" max="10000" value="0" step="10">
+                    <output for="likesRange" id="likesOutput">0</output>
+                </li>
+                <li>
+                    <label for="commentsRange">Comments</label>
+                    <input type="range" id="commentsRange" min="0" max="10000" value="0" step="10">
+                    <output for="commentsRange" id="commentsOutput">0</output>
+                </li>
+                <li>
+                    <label for="sharesRange">Shares</label>
+                    <input type="range" id="sharesRange" min="0" max="10000" value="0" step="10">
+                    <output for="sharesRange" id="sharesOutput">0</output>
+                </li>
+            </ul>
+        </div>
+
+    </div> -->
+    <!-- <div class="posts">
+        {% for post in posts %}
+        <div class="post">
+            <div class="details">
+                {%if post.platform_id == '1' %}<ion-icon class="logo-icon" name="logo-facebook"></ion-icon>
+                {% elif post.platform_id == '2' %}<ion-icon class="logo-icon" name="logo-twitter"></ion-icon>
+                {% else %}
+                {% endif %}
+            </div>
+            <div class="card">
+                <div>
+                    {% with last_like=post.likes|last %}
+                    <div class="numbers">{{ last_like.value}}</div>
+                    {% endwith %}
+                    <div class="cardName">Likes</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon class="col1-sm" name="thumbs-up-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    {% with last_like=post.shares|last %}
+                    <div class="numbers">{{ last_like.value}}</div>
+                    {% endwith %}
+                    <div class="cardName">Shares</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="share-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    {% with last_like=post.num_comments|last %}
+                    <div class="numbers">{{ last_like.value}}</div>
+                    {% endwith %}
+                    <div class="cardName">Comments</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="chatbubbles-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    <div class="numbers">{{post.positive_score}}%</div>
+                    <div class="cardName">Positive Comments</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon class="icon" name="cloudy-night-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="details">
+                <ion-icon class="icon" name="person-circle-outline"></ion-icon>
+                <p class="username">{{post.username}}</p>
+            </div>
+            <div class="options">
+                <a href="{% url 'post_detail' post_id=post.post_id %}"><ion-icon name="eye-outline"></ion-icon></a>
+                <a href="{% url 'add_post' post_id=post.post_id %}"><ion-icon name="add-circle-outline"></ion-icon></a>
+                <a href="{% url 'edit_post' post_id=post.post_id %}"><ion-icon name="create-outline"></ion-icon></a>
+                <a href="{% url 'delete_post' post_id=post.post_id %}"><ion-icon name="trash-outline"></ion-icon></a>
+            </div>
+        </div>
+        {% endfor %}
+        <br>
+
+        {% if posts.has_other_pages %}
+        <div class="page-info">
+        Page {{posts.number}} of {{posts.paginator.num_pages}}
+        </div>
+        <ul class="pagination justify-content-center">
+            {% if posts.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{posts.previous_page_number}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+            {% endif %}
+
+            <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
+
+            {% if posts.has_next and posts.paginator.num_pages != 3 and posts.paginator.num_pages != 2 %}
+            <li class="page-item"><a class="page-link" href="#">...</a></li>
+            <li class="page-item"><a class="page-link"
+                    href="?page={{posts.paginator.num_pages}}">{{posts.paginator.num_pages}}</a></li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{posts.next_page_number}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+        {% endif %}
+
+        <br>
+    </div> -->
+<!-- </div> -->
+<!-- <script>
+    // Get all the sentimentText elements
+    var sentimentTextElements = document.querySelectorAll('.sentimentText');
+
+    // Iterate through each sentimentText element
+    sentimentTextElements.forEach(function (sentimentText) {
+        // Get the scores from the data attributes
+        var positiveScore = parseFloat(sentimentText.getAttribute('data-positive-score'));
+        var negativeScore = parseFloat(sentimentText.getAttribute('data-negative-score'));
+        var neutralScore = parseFloat(sentimentText.getAttribute('data-neutral-score'));
+
+        // Determine the color class based on the scores
+        if (positiveScore > negativeScore && positiveScore > neutralScore) {
+            sentimentText.classList.add('positive');
+        } else if (negativeScore > positiveScore && negativeScore > neutralScore) {
+            sentimentText.classList.add('negative');
+        } else {
+            sentimentText.classList.add('neutral');
+        }
+    });
+
+    function toggleMenu() {
+        var filterMenu = document.getElementById('filterMenu');
+        if (filterMenu.style.display === 'block') {
+            filterMenu.style.display = 'none';
+        } else {
+            filterMenu.style.display = 'block';
+        }
+    }
+
+    var likesRange = document.getElementById('likesRange');
+    var likesOutput = document.getElementById('likesOutput');
+    likesRange.addEventListener('input', function () {
+        likesOutput.textContent = likesRange.value;
+    });
+
+    var commentsRange = document.getElementById('commentsRange');
+    var commentsOutput = document.getElementById('commentsOutput');
+    commentsRange.addEventListener('input', function () {
+        commentsOutput.textContent = commentsRange.value;
+    });
+
+    var sharesRange = document.getElementById('sharesRange');
+    var sharesOutput = document.getElementById('sharesOutput');
+    sharesRange.addEventListener('input', function () {
+        sharesOutput.textContent = sharesRange.value;
+    });
+
+    $('input[type="range"]').on('input', function () {
+        var value = $(this).val();
+        $(this).css('--slider-value', value + '%');
+    });
+</script>
+{% endblock %} -->

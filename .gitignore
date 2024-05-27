@@ -1,0 +1,12 @@
+dashboard/__pycache__
+dashboard/scraper/__pycache__
+dashboard/migrations/__pycache__
+core/__pycache__
+authentication/__pycache__
+authentication/migrations/__pycache__
+scrapper/__pycache__
+dashboard/scrapper/__pycache__
+authentication/__pycache__
+
+
+.venv

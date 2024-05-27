@@ -1,0 +1,609 @@
+{% extends 'dashbase.html' %}
+{% block content %}
+
+<div class="detail-container">
+    <div class="topRow">
+        <div class="platform">
+            <span> {%if result.platform_id == '1' %}<ion-icon class="logo-icon" name="logo-facebook"
+                    style="color: #3b5998"></ion-icon>
+                {% elif result.platform_id == '2' %}<ion-icon class="logo-icon" name="logo-twitter"
+                    style="color: #00acee"></ion-icon>
+                {% elif result.platform_id == '3' %}<ion-icon class="logo-icon" name="logo-linkedin"
+                    style="color: #0e76a8"></ion-icon>
+                {% elif result.platform_id == '4' %}<ion-icon class="logo-icon" name="logo-tiktok"
+                style="color: #01080B"></ion-icon>
+                {% elif result.platform_id == '5' %}<ion-icon class="logo-icon" name="logo-instagram"
+                    style="color: #EC9B5F"></ion-icon>
+                {% elif result.platform_id == '6' %}<ion-icon class="logo-icon" name="logo-youtube"
+                    style="color: #FF5733"></ion-icon>
+                {% else %}
+                {% endif %}</span>
+            <div class="pfName">
+                <span> 
+                    {%if result.platform_id == '1' %}Facebook Post
+                    {% elif result.platform_id == '2' %}Twitter Post
+                    {% elif result.platform_id == '3' %}LinkedIn Post
+                    {% elif result.platform_id == '4' %}TikTok Post
+                    {% elif result.platform_id == '5' %}Instagram Post
+                    {% elif result.platform_id == '6' %}Youtube Post
+                    {% else %}
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="options">
+            <div class="refresh">
+                <a href="{% url 'refresh' user_provided_id=result.user_provided_id %}"><ion-icon name="refresh-circle"></ion-icon></a>
+            </div>
+            <div class="add-entry">
+                <a href="{% url 'add_post' post_id=result.post_id %}"><ion-icon name="add-circle"></ion-icon></a>
+            </div>
+            <div class="edit">
+                <a href="{% url 'edit_post' result.post_id %}"><ion-icon name="create"></ion-icon></a>
+            </div>
+            <div class="delete">
+                <a href="{% url 'delete_post' result.post_id %}"><ion-icon name="trash"></ion-icon></a>
+            </div>
+        </div>
+    </div>
+    <div class="detailsRow">
+        <div class="details">
+
+            <div class="d-update-freq">
+                <span><input type="text" value="{{result.user_provided_id}}" disabled></input><span>
+            </div>
+            <div class="d-username">
+                <span>
+                    {{result.username}}
+                </span>
+                <a href="{{result.url}}" target="_blank">
+                    <ion-icon name="link"></ion-icon>
+                </a>
+            </div>
+            <div class="d-date-posted">
+                <span>
+                    Date Posted:
+                </span>
+                <span>
+                    {{result.post_date}}
+                </span>
+            </div>
+            <div class="d-date-updated">
+                <span>
+                    Update Frequency:
+                </span>
+                <span>
+                    Every {{frequency}} hours
+                </span>
+            </div>
+            <div class="d-date-updated">
+                <span>
+                    Last Updated:
+                </span>
+                <span>
+                    {{result.last_updated}}
+                </span>
+            </div>
+            <div class="d-date-updated">
+                <span>
+                    Content Type:
+                </span>
+                <span>
+                    {{result.content_type}}
+                </span>
+            </div>
+            <div class="auto-update-row">
+
+                <div class="d-update-freq">
+                    <span>
+                        Kill Switch:
+                    </span>
+                </div>
+                <form method="get" id="kill_switch_form" action="{% url 'kill_switch' result.post_id %}">
+                    <label class="switch">
+                        <input type="checkbox" name="switch_status" id="switch_status" {% if result.switch_status %}checked{% endif %}>
+                        <span class="slider round"></span>
+                    </label>
+                </form>
+            </div>
+            <div class="d-update-freq">
+                {% if result.likes|length > 4%}
+                    {% if result.switch_status %}
+                        <span>
+                            The lifespan of this post is over
+                        </span>
+                    {% else %}
+                        {% if near_death %}
+                            <span>
+                                Estimated time to die:
+                            </span>
+                            <span>
+                                Next {{life_span}} hours
+                            </span>
+                        {% else %}
+                            <span>
+                                This post is predicted to live
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                <span>
+                    No enough data to predict the lifespan, atleast 4 growth rates required
+                </span>
+                {% endif %}
+            </div>
+            <div class="d-update-freq">
+                <span>
+                    <b>{{result.username}}'s</b> optimal time range to post is from <b>{{optimal_start_time}}</b> to <b>{{optimal_end_time}}</b>
+                </span>
+            </div>
+        </div>
+        <div>
+            <div>
+                <canvas style="display: block;" class="my-4 w-100 chartjs-render-monitor" id="sentimentChart"
+                    width="500" height="120"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="statsContainer">
+        <div class="statsRow">
+            <div class="stat">
+                <ion-icon name="heart"></ion-icon>
+                {% with last_like=result.likes|last %}
+                <span>{{ last_like.value}} Likes</span>
+                {% endwith %}
+            </div>
+            <div class="stat">
+                <ion-icon name="chatbox"></ion-icon>
+                {% with last_like=result.num_comments|last %}
+                <span>{{ last_like.value}} Comments</span>
+                {% endwith %}
+            </div>
+            <div class="stat">
+                <ion-icon name="share-social"></ion-icon>
+                {% with last_like=result.shares|last %}
+                <span>{{ last_like.value}} Shares</span>
+                {% endwith %}
+            </div>
+            <div class="stat">
+                <ion-icon name="happy"></ion-icon>
+                <span>{{ result.positive_score}} Happy Score</span>
+            </div>
+        </div>
+    </div>
+    <div class="metrics">
+        <div class="col1">
+
+            <div>
+                <h5 class="text-light text-bold">Post Likes analysis</h2>
+                    <p class="text-light mb-0">{{result.username}}'s post has the following line chart with likes'
+                        analysis
+                        done with time.</p>
+            </div>
+            <div>
+                <canvas class="my-4 w-100 chartjs-render-monitor" id="likesChart" width="600" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col1">
+            <div>
+                <h5 class="text-light text-bold">Post Shares analysis</h2>
+                    <p class="text-light mb-0">{{result.username}}'s post has the following line chart with shares'
+                        analysis
+                        done with time.</p>
+            </div>
+            <div>
+                <canvas style="display: block;" class="my-4 w-100 chartjs-render-monitor" id="sharesChart" width="600"
+                    height="200"></canvas>
+            </div>
+        </div>
+        <div class="col1">
+            <div>
+                <h5 class="text-light text-bold">Post Comments analysis</h2>
+                    <p class="text-light mb-0">{{result.username}}'s post has the following line chart with comments'
+                        analysis done with time.</p>
+            </div>
+            <div>
+                <canvas style="display: block;" class="my-4 w-100 chartjs-render-monitor" id="commentsChart" width="600"
+                    height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    {% if result.top_commentators%}<div class="comments" style="min-height: 300px;">
+        <h3>Top commentators</h3>
+        {% for top_commentator in result.top_commentators %}
+        {% for commentator in top_commentator %}
+        <div class="commentator">{{commentator.name}}</div>Occurrence: {{commentator.value}}<br>{% endfor %}{% endfor %}
+    </div>{% endif %}
+    <div class="comments">
+        <h3>Comments</h3>
+        {% for comment in result.comments %}
+        <div class="commentator">{{comment.commentator}}</div>{{comment.comment_text}} <br>{% endfor %}
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#switch_status').change(function() {
+            $('#kill_switch_form').submit();
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        hljs.highlightElement(document.querySelector('#json-data'));
+    });
+
+    fetch('{% url "graph_anaylsis" post_id=result.post_id %}')
+        .then(response => response.json())
+        .then(whole_data => {
+            // Fetching Likes data
+            var likes_list = whole_data.likes_list;
+            var likes_timeframes = whole_data.likes_timeframes;
+            var likes_growth_rates_list = whole_data.likes_growth_rates_list;
+
+            // Likes' Chart
+            var ctx = document.getElementById('myChart')
+            var canvasElement = document.getElementById("likesChart")
+
+            var config = {
+                data: {
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: 'Growth Rate',
+                            data: likes_growth_rates_list,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            fill: false,
+                            // yAxisID: 'growth-axis',
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Number of likes',
+                            data: likes_list,
+                            backgroundColor: 'rgba(54, 162, 235, 1)',
+                            fill: true,
+                            yAxisID: 'likes-axis',
+                        },
+
+                    ],
+                    labels: likes_timeframes,
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'x',
+                        intersect: false,
+                    },
+                    plugins: {
+                        zoom: {
+                            pan: {
+                                enabled: true,
+                                mode: 'x',
+                                speed: 2,
+                                threshold: 10
+                            },
+                            zoom: {
+                                wheel: {
+                                  enabled: true,
+                                },
+                                pinch: {
+                                  enabled: true
+                                },
+                                mode: 'xy',
+                                speed: 0.1,
+                                threshold: 2,
+                                sensitivity: 2,
+                            }
+                        },
+                        filler: {
+                            propagate: true
+                        },
+                    },
+                    scales: {
+                        y: {
+                            id: 'likes-axis',
+                            type: 'linear',
+                            position: 'left',
+                            dispaly: false,
+                        },
+                        y: {
+                            id: 'growth-axis',
+                            type: 'linear',
+                            position: 'right',
+                            display: true,  // This hides the secondary Y-axis
+                        },
+                        x: {
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Time in seconds'
+                            },
+                            ticks: {
+                                fontColor: 'blue',
+                                minRotation: 25,
+                            }
+                        }
+                    },
+                    maintainAspectRatio: false,
+                    elements: {
+                        point: {
+                            radius: 4
+                        },
+                        line: {
+                            tension: 0.4
+                        }
+                    },
+                }
+            };
+
+            var likesChart = new Chart(canvasElement, config);
+
+            // Fetching Shares data
+            var shares_list = whole_data.shares_list
+            var shares_timeframes = whole_data.shares_timeframes
+            var shares_growth_rates_list = whole_data.shares_growth_rates_list
+
+            // Shares' Chart
+            var canvasElement = document.getElementById("sharesChart");
+
+            var config = {
+                data: {
+                    datasets: [{
+                        type: 'line',
+                        label: 'Growth Rate',
+                        data: shares_growth_rates_list,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        fill: false,
+                    }, {
+                        type: 'bar',
+                        label: 'Number of shares',
+                        data: shares_list,
+                        backgroundColor: 'rgba(54, 162, 235, 1)',
+                        fill: true,
+                        yAxisID: 'shares-axis',
+                    },
+                    ],
+                    labels: shares_timeframes,
+                },
+                options: {
+                    plugins: {
+                        zoom: {
+                            pan: {
+                                enabled: true,
+                                mode: 'x',
+                                speed: 2,
+                                threshold: 10
+                            },
+                            zoom: {
+                                wheel: {
+                                  enabled: true,
+                                },
+                                pinch: {
+                                  enabled: true
+                                },
+                                mode: 'xy',
+                                speed: 0.1,
+                                threshold: 2,
+                                sensitivity: 2,
+                            }
+                        },
+                        filler: {
+                            propagate: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            id: 'shares-axis',
+                            type: 'linear',
+                            position: 'left',
+                            dispaly: false,
+                        },
+                        y: {
+                            id: 'growth-axis',
+                            type: 'linear',
+                            position: 'right',
+                            display: true,  // This hides the secondary Y-axis
+
+                        },
+                        x: {
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Time in seconds'
+                            },
+                            ticks: {
+                                fontColor: 'blue',
+                                minRotation: 25,
+                            }
+                        }
+                    },
+                    maintainAspectRatio: false,
+                    elements: {
+                        point: {
+                            radius: 4
+                        },
+                        line: {
+                            tension: 0.4
+                        }
+                    }
+                }
+            };
+
+            var sharesChart = new Chart(canvasElement, config);
+
+            // Fetching num_comments data
+            var num_comments_list = whole_data.num_comments_list
+            var num_comments_timeframes = whole_data.num_comments_timeframes
+            var num_comments_growth_rates_list = whole_data.num_comments_growth_rates_list
+
+            // Comments' Chart
+            var canvasElement = document.getElementById("commentsChart");
+
+            var config = {
+                data: {
+                    datasets: [{
+                        type: 'line',
+                        label: 'Growth Rate',
+                        data: num_comments_growth_rates_list,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        fill: false,
+                    }, {
+                        type: 'bar',
+                        label: 'Number of Comments',
+                        data: num_comments_list,
+                        backgroundColor: 'rgba(54, 162, 235, 1)',
+                        fill: true,
+                        yAxisID: 'comments-axis',
+                    }],
+                    labels: num_comments_timeframes,
+                },
+                options: {
+                    plugins: {
+                        zoom: {
+                            pan: {
+                                enabled: true,
+                                mode: 'x',
+                                speed: 2,
+                                threshold: 10
+                            },
+                            zoom: {
+                                wheel: {
+                                  enabled: true,
+                                },
+                                pinch: {
+                                  enabled: true
+                                },
+                                mode: 'xy',
+                                speed: 0.1,
+                                threshold: 2,
+                                sensitivity: 2,
+                            }
+                        },
+                        filler: {
+                            propagate: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            id: 'comments-axis',
+                            type: 'linear',
+                            position: 'left',
+                            dispaly: false,
+                        },
+                        y: {
+                            id: 'growth-axis',
+                            type: 'linear',
+                            position: 'right',
+                            display: true,  // This hides the secondary Y-axis
+
+                        },
+                        x: {
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Time in seconds'
+                            },
+                            ticks: {
+                                fontColor: 'blue',
+                                minRotation: 25,
+                            }
+                        }
+                    },
+                    maintainAspectRatio: false,
+                    elements: {
+                        point: {
+                            radius: 4
+                        },
+                        line: {
+                            tension: 0.4
+                        }
+                    }
+                }
+            };
+            var commentsChart = new Chart(canvasElement, config);
+
+            // Fetching sentiment_anaylsis data
+            var sentiment_anaylsis = whole_data.sentiment_anaylsis
+            console.log(sentiment_anaylsis[0]);
+            console.log(sentiment_anaylsis[1]);
+            console.log(sentiment_anaylsis[2]);
+            // Sentiments' Chart
+            var canvasElement = document.getElementById("sentimentChart");
+
+            var config = {
+                type: 'bar',
+                data: {
+                    labels: [''],
+                    datasets: [
+                        {
+                            label: 'Positive',
+                            data: [sentiment_anaylsis[0]],
+                            backgroundColor: 'rgb(75, 219, 98)',
+                            hoverOffset: 20
+                        },
+                        {
+                            label: 'Neutral',
+                            data: [sentiment_anaylsis[0] + sentiment_anaylsis[1]],
+                            backgroundColor: 'rgb(240, 222, 59)',
+                            hoverOffset: 20
+                        },
+                        {
+                            label: 'Negative',
+                            data: [sentiment_anaylsis[0] + sentiment_anaylsis[1] + sentiment_anaylsis[2]],
+                            backgroundColor: 'rgb(219, 82, 75)',
+                            hoverOffset: 20
+                        }
+                    ]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Sentiments',
+                            align: 'start',
+                        },
+                        legend: {
+                            position: 'right',
+                            align: 'center',
+                            labels: {
+                                boxWidth: 20,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            enabled: false,
+                            // display: false,
+                            // callbacks: {
+                            //     label: function (context) {
+                            //         return context.raw + '%';
+                            //     }
+                            // }
+                        }
+                    },
+                    responsive: true,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            ticks: {
+                                callback: function (value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                display: false
+                            },
+                            max: 100,
+                        },
+                        y: {
+                            display: false,
+                            stacked: true
+                        }
+                    }
+                }
+            };
+
+            var sentimentChart = new Chart(canvasElement, config);
+        });
+</script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'dashbase.html' %} {% block content %}
+<div class="home-alert">{% include 'includes/alerts.html' %}</div>
+<!-- my_form.html -->
+<form class="form" method="POST" action="{% url 'comparison' %}">
+  {% csrf_token %}
+  <div class="form-title">Compare users</div>
+  <div class="form-field">
+    <label for="username1">First username:</label>
+    <select name="username1" id="username1" required>
+      {% for username in all_usernames%}
+      <option>{{username}}</option>
+      {% endfor%}
+    </select>
+  </div>
+  <div class="form-field">
+    <label for="username2">Second username:</label>
+    <select name="username2" id="username2" required>
+      {% for username in all_usernames%}
+      <option>{{username}}</option>
+      {% endfor%}
+    </select>
+  </div>
+  <button class="test-scrap-button" type="submit" target="_blank">
+    Send to voyager
+  </button>
+</form>
+{% endblock %}

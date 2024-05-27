@@ -1,0 +1,92 @@
+<!-- {% if messages %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {% for message in messages%}
+    {{message}}
+    <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    {% endfor %}
+</div>
+<script>
+    const closeButton = document.querySelector('.alert .close');
+    const alertElement = document.querySelector('.alert');
+  
+    closeButton.addEventListener('click', () => {
+      alertElement.remove();
+    });
+  </script>
+{% endif%}
+
+
+
+ -->
+
+
+{% if messages %}
+<div id="snackbarContainer">
+  <div id="snackbarID" class="snackbar">
+    <div class="message-container">
+      {% for message in messages %}
+      <div class="message">{{ message }}</div>
+      {% endfor %}
+    </div>
+    <button type="button" class="close" id="close-snackbar">
+      <ion-icon class="close-icon" name="close-outline" style="font-size: large;"></ion-icon>
+    </button>
+  </div>
+</div>
+
+<script>
+  window.onload = function() {
+    const snackbarContainer = document.getElementById('snackbarContainer');
+
+    snackbarContainer.addEventListener('click', function(event) {
+      const closeButton = event.target.closest('.close');
+      const snackbarElement = event.target.closest('.snackbar');
+
+      if (closeButton && snackbarElement) {
+        snackbarElement.style.display = 'none';
+      }
+    });
+
+    const snackbarElement = document.querySelector('.snackbar');
+
+    // Timeout duration in milliseconds (e.g., 10000 = 10 seconds)
+    const timeoutDuration = 5000;
+
+    // Auto close after the specified duration
+    setTimeout(function() {
+      snackbarElement.style.opacity = '0';
+      setTimeout(function() {
+        snackbarElement.remove();
+      }, 150);
+    }, timeoutDuration);
+  };
+</script>
+{% endif %}
+
+
+<!-- {% if messages %}
+ {% for message in messages %}
+   <div class="alert alert-dismissible fade show {{ message_type }}" role="alert">
+     {{ message }}
+     <button type="button" class="close" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+     </button>
+   </div>
+ {% endfor %}
+ <script>
+   const closeButtons = document.querySelectorAll('.alert .close');
+   const alertElements = document.querySelectorAll('.alert');
+
+   closeButtons.forEach((closeButton, index) => {
+     closeButton.addEventListener('click', () => {
+       alertElements[index].remove();
+     });
+   });
+
+   setTimeout(() => {
+     alertElements.forEach(alertElement => alertElement.remove());
+   }, 30000);
+ </script>
+{% endif %} -->

@@ -1,0 +1,315 @@
+{% extends 'dashbase.html' %}
+{% block content %}
+{% load static %}
+<div class="home-alert">
+    {% include 'includes/alerts.html' %}
+</div>
+<div>
+    <!-- <div class="search-bar">
+        <form class="form" action="{% url 'search_results' %}" method="get">
+            <div class="form-field">
+                <label for="username">Username:</label>
+                <input type="text" placeholder="eg Geoffrey Peter" name="username">
+            </div>
+            <div class="form-field">
+                <label for="likes">Likes:</label>
+                <input type="number" min="0" step="1" placeholder="eg 10000" value=0 name="likes">
+            </div>
+            <div class="form-field">
+                <label for="comments">Comments:</label>
+                <input type="number" min="0" step="1" placeholder="eg 10000" value=0 name="comments">
+            </div>
+            <div class="form-field">
+                <label for="shares">Shares:</label>
+                <input type="number" min="0" step="1" placeholder="eg 10000" value=0 name="shares">
+            </div>
+            <div class="form-field">
+                <label for="post_date">Post Date:</label>
+                <input type="date" class="form-control" name="post_date" pattern="\d{4}-\d{2}-\d{2}">
+            </div>
+            <button class="search main-btn" type="submit">Search</button>
+        </form>
+    </div> -->
+
+    <div class="tpContainer" id="tpContainer">
+        <div class="tpHeading">
+            <span>Tracked Posts</span>
+        </div>
+        {% for result in results %}
+        <div class="tpCard">
+            <a href="{% url 'post_detail' post_id=result.post_id %}" style="color:inherit; text-decoration: none;">
+
+                <div class="tpCardColumn">
+                    <div class="tpTopRow">
+                        <div class="tpUsername">
+                            <span>{{result.username}}</span>
+                        </div>
+                        <div class="tpPlatformIcon">
+                            <span> {%if result.platform_id == '1' %}<ion-icon class="logo-icon" name="logo-facebook"
+                                style="color: #3b5998"></ion-icon>
+                            {% elif result.platform_id == '2' %}<ion-icon class="logo-icon" name="logo-twitter"
+                                style="color: #00acee"></ion-icon>
+                            {% elif result.platform_id == '3' %}<ion-icon class="logo-icon" name="logo-linkedin"
+                                style="color: #0e76a8"></ion-icon>
+                            {% elif result.platform_id == '4' %}<ion-icon class="logo-icon" name="logo-tiktok"
+                            style="color: #01080B"></ion-icon>
+                            {% elif result.platform_id == '5' %}<ion-icon class="logo-icon" name="logo-instagram"
+                                style="color: #EC9B5F"></ion-icon>
+                            {% elif result.platform_id == '6' %}<ion-icon class="logo-icon" name="logo-youtube"
+                                style="color: #FF5733"></ion-icon>
+                            {% else %}
+                            {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="tpPostId">
+                        <span>Post ID: {{result.post_id|truncatechars:20}}</span>
+                    </div>
+                    <div class="tpPostContent">
+                        <span>{{result.content|truncatechars:50}}</span>
+                    </div>
+                    <!-- <div class="tpSentiment">
+                        <span class="sentimentText" data-positive-score="{{ post.positive_score }}"
+                            data-negative-score="{{ post.negative_score }}"
+                            data-neutral-score="{{ post.neutral_score }}">
+                            {% if post.positive_score > post.negative_score and post.positive_score > post.neutral_score%}
+                            Overall Positive Sentiment
+                            {% elif post.negative_score > post.positive_score and post.negative_score >
+                            post.neutral_score %}
+                            Overall Negative Sentiment
+                            {% else %}
+                            Overall Neutral Sentiment
+                            {% endif %}
+                        </span>
+                    </div> -->
+                    <div class="tpBottomRow">
+                        <div class="tpStats">
+                            <ion-icon name="heart"></ion-icon>
+                            {% with last_like=result.likes|last %}
+                            <span>{{ last_like.value}} Likes</span>
+                            {% endwith %}
+                        </div>
+                        <div class="tpStats">
+                            <ion-icon name="chatbox"></ion-icon>
+                            {% with last_like=result.num_comments|last %}
+                            <span>{{ last_like.value}} Comments</span>
+                            {% endwith %}
+                        </div>
+                        <div class="tpStats">
+                            <ion-icon name="share-social"></ion-icon>
+                            {% with last_like=result.likes|last %}
+                            <span>{{ last_like.value}} Shares</span>
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+
+    </div>
+    <div class="searchContainer" id="searchContainer">
+        <button class="filter-button" onclick="toggleMenu2()" style="z-index: 1000;" type="button">Filters
+        </button>
+        <div class="filter-menu" id="searchMenu" style="z-index: 10001;">
+            <form class="form" action="{% url 'search_results' %}" method="get">
+                {% csrf_token %}
+                <button class="close-button" onclick="toggleMenu2()" type="button"><ion-icon
+                        name="chevron-up-outline"></ion-icon></button>
+                <span class="search-title">
+                    Search
+                </span>
+                <div class="form-field">
+                    <label for="username">Username:</label>
+                    <input type="text" placeholder="eg Geoffrey Peter" name="username">
+                </div>
+                <div class="form-field">
+                    <label for="likes">Max Likes:</label>
+                    <input type="number" min="0" step="1" placeholder="eg 10000" value=0 name="likes">
+                </div>
+                <div class="form-field">
+                    <label for="comments">Max Comments:</label>
+                    <input type="number" min="0" step="1" placeholder="eg 10000" value=0 name="comments">
+                </div>
+                <div class="form-field">
+                    <label for="shares">Max Shares:</label>
+                    <input type="number" min="0" step="1" placeholder="eg 10000" value=0 name="shares">
+                </div>
+                <div class="form-field">
+                    <label for="post_date">Post Date:</label>
+                    <input type="date" class="form-control" name="post_date" pattern="\d{4}-\d{2}-\d{2}">
+                </div>
+                <button class="test-scrap-button" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    <!-- <div class="posts">
+        {% for result in results %}
+        <div class="post">
+            <div class="details">
+                {%if result.platform_id == '1' %}<ion-icon class="logo-icon" name="logo-facebook"></ion-icon>
+                {% elif result.platform_id == '2' %}<ion-icon class="logo-icon" name="logo-twitter"></ion-icon>
+                {% else %}
+                {% endif %}
+            </div>
+            <div class="card">
+                <div>
+                    {% with last_like=result.likes|last %}
+                    <div class="numbers">{{ last_like.value}}</div>
+                    {% endwith %}
+                    <div class="cardName">Likes</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon class="col1-sm" name="thumbs-up-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    {% with last_like=result.shares|last %}
+                    <div class="numbers">{{ last_like.value}}</div>
+                    {% endwith %}
+                    <div class="cardName">Shares</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="share-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    {% with last_like=result.num_comments|last %}
+                    <div class="numbers">{{ last_like.value}}</div>
+                    {% endwith %}
+                    <div class="cardName">Comments</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon name="chatbubbles-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    <div class="numbers">59%</div>
+                    <div class="cardName">Positive Comments</div>
+                </div>
+                <div class="iconBx">
+                    <ion-icon class="icon" name="cloudy-night-outline"></ion-icon>
+                </div>
+            </div>
+            <div class="details">
+                <ion-icon class="icon" name="person-circle-outline"></ion-icon>
+                <p class="username">{{result.username}}</p>
+            </div>
+            <div class="options">
+                <a href="{% url 'post_detail' post_id=result.post_id %}"><ion-icon name="eye-outline"></ion-icon></a>
+                <a href="{% url 'add_post' post_id=result.post_id %}"><ion-icon name="add-circle-outline"></ion-icon></a>
+                <a href="{% url 'edit_post' post_id=result.post_id %}"><ion-icon name="create-outline"></ion-icon></a>
+                <a href="{% url 'delete_post' post_id=result.post_id %}"><ion-icon name="trash-outline"></ion-icon></a>
+            </div>
+        </div>
+        {% endfor %}
+        <br>
+        {% if results.has_other_pages %}
+        <div class="text-center text-light">
+            Page {{results.number}} of {{results.paginator.num_pages}}
+        </div>
+        <ul class="pagination justify-content-center">
+            {% if results.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{results.previous_page_number}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+            {% endif %}
+
+            <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
+
+            {% if results.has_next and results.paginator.num_pages != 3 and results.paginator.num_pages != 2 %}
+            <li class="page-item"><a class="page-link" href="#">...</a></li>
+            <li class="page-item"><a class="page-link"
+                    href="?page={{results.paginator.num_pages}}">{{results.paginator.num_pages}}</a></li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{results.next_page_number}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+        {% endif %}
+
+        <br>
+    </div> -->
+    <!-- <form class="searchContainer" action="{% url 'search_results' %}" method="get">
+
+        <div class="searchBar">
+            <ion-icon name="search-outline"></ion-icon>
+            <input type="text" placeholder="Search username" name="username">
+            <button class="" style="margin-top: 5px;" type="submit">
+                <ion-icon name="send"></ion-icon>
+            </button>
+        </div>
+       
+        <button class="search" onclick="toggleMenu()" type="button">Filters</button>
+        <div class="filter-menu" id="filterMenu">
+         
+            <ul>
+                <li>
+                    <label for="likesRange">Likes</label>
+                    <input type="range" id="likesRange" min="0" max="10000" step="10">
+                    <output for="likesRange" id="likesOutput">0</output>
+                </li>
+                <li>
+                    <label for="commentsRange">Comments</label>
+                    <input type="range" id="commentsRange" min="0" max="10000" step="10">
+                    <output for="commentsRange" id="commentsOutput">0</output>
+                </li>
+                <li>
+                    <label for="sharesRange">Shares</label>
+                    <input type="range" id="sharesRange" min="0" max="10000" step="10">
+                    <output for="sharesRange" id="sharesOutput">0</output>
+                </li>
+                <li>
+                    <label for="post_date">Post Date:</label>
+                    <input type="date" class="form-control" name="post_date" pattern="\d{4}-\d{2}-\d{2}">
+                </li>
+            </ul>
+        </div>
+    </form> -->
+</div>
+<script>
+    var sentimentTextElements = document.querySelectorAll('.sentimentText');
+
+    // Iterate through each sentimentText element
+    sentimentTextElements.forEach(function (sentimentText) {
+        // Get the scores from the data attributes
+        var positiveScore = parseFloat(sentimentText.getAttribute('data-positive-score'));
+        var negativeScore = parseFloat(sentimentText.getAttribute('data-negative-score'));
+        var neutralScore = parseFloat(sentimentText.getAttribute('data-neutral-score'));
+
+        // Determine the color class based on the scores
+        if (positiveScore > negativeScore && positiveScore > neutralScore) {
+            sentimentText.classList.add('positive');
+        } else if (negativeScore > positiveScore && negativeScore > neutralScore) {
+            sentimentText.classList.add('negative');
+        } else {
+            sentimentText.classList.add('neutral');
+        }
+    });
+
+    function toggleMenu2() {
+        console.log("i am being called properly")
+        var filterMenu = document.getElementById('searchMenu');
+        if (filterMenu.style.display === 'block') {
+            filterMenu.style.display = 'none';
+        } else {
+            filterMenu.style.display = 'block';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById("tpContainer").style.display = "none";
+        document.getElementById("searchContainer").style.display = "none";
+    });
+
+</script>
+{% endblock %}

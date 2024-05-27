@@ -1,0 +1,20 @@
+{% extends 'dashbase.html' %}
+{% block content %}
+
+<!-- my_form.html -->
+<div class="preview-post-container">
+    <div class="form-title">New Post Manual Entry</div>
+    <form method="POST" action="{% url 'new_post_manually' %}">
+        {% csrf_token %}
+        <div class="form-field">
+            {{ form.as_p }}
+            <script>
+                $(document).ready(function() {
+                    $("#id_post_date").datepicker();
+                });
+            </script>
+        </div>
+        <button class="add-button" type="submit">Submit</button>
+    </form>
+</div>
+{% endblock %}

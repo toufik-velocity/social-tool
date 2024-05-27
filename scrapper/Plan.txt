@@ -1,0 +1,13 @@
+What the cron job will do:
+	1) Check for time difference between last like timestamp and the time now and if it matches the frequency then do scrapping of the post with the user_provided_id.
+
+	2) Threading of processes to scrap 3 times at the same time and should be 1 facebook and 2 twitter(to avoid facebook blocking)
+
+	3) Reloading the check after every 1 minute(process 1)
+
+	4) It should run for ever.
+
+	5) It should run as a service on the machine as a deamon on boot.
+
+Expected issues:
+	1) Scheduling scrapping in 2 above in a way that after each 3 it will take the next 3 and continue.

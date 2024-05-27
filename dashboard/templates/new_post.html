@@ -1,0 +1,150 @@
+{% extends 'dashbase.html' %} {% block content %}
+<div class="home-alert">{% include 'includes/alerts.html' %}</div>
+<!-- my_form.html -->
+<form class="form" method="POST" action="{% url 'new_post' %}">
+  {% csrf_token %}
+  <div class="form-title">Add New Post</div>
+  <div class="form-field">
+    <label for="likes">Post ID:</label>
+    <input type="text" placeholder="Enter Post ID" name="post_id" required />
+  </div>
+  <div class="form-field">
+    <label for="platform">Platform:</label>
+    <select name="platform" id="platform" required>
+      <option value="Facebook">Facebook</option>
+      <option value="Twitter">Twitter</option>
+      <option value="LinkedIn">LinkedIn</option> <!-- Added LinkedIn option -->
+    </select>
+  </div>
+  <div class="form-field" id="linkedin-field" style="display: none;">
+    <label for="linkedin-username">LinkedIn Username:</label>
+    <input type="text" placeholder="Enter LinkedIn username" name="linkedin_username" />
+  </div>
+  <div class="form-field">
+    <label for="frequency">Scrapping Frequency (in hrs):</label>
+    <input type="number" min="0" step="1" placeholder="Enter Scrapping Frequency" name="frequency" required />
+  </div>
+  <button class="test-scrap-button" type="submit">Test scrapping</button>
+</form>
+
+{% if scrapped_result%}<div class="preview-post-container">
+  <div class="title">Preview Post</div>
+  <div class="topRow">
+    <div class="detailsRow">
+      <div class="details">
+        <div class="d-username">
+          <span>
+            {{scrapped_result.username}}
+          </span>
+          <a href="{{scrapped_result.url}}" target="_blank">
+            <ion-icon name="link"></ion-icon>
+          </a>
+        </div>
+        <div class="d-date-posted">
+          <span>
+            Date Posted:
+          </span>
+          <span>
+            {{scrapped_result.post_date}}
+          </span>
+        </div>
+        <div class="d-date-updated">
+          <span>
+            Last Updated:
+          </span>
+          <span>
+            {{scrapped_result.last_updated}}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="platform">
+      <span> {%if scrapped_result.platform_id == '1' %}
+        {% elif scrapped_result.platform_id == '2' %}<ion-icon class="logo-icon" name="logo-twitter"
+          style="color :#00acee"></ion-icon>
+        {% else %}
+        {% endif %}</span>
+    </div>
+  </div>
+  <div class="statsContainer">
+    <div class="statsRow">
+      <div class="stat">
+        <ion-icon name="heart"></ion-icon>
+        {% with last_like=scrapped_result.likes|last %}
+        <span>{{ last_like.value}} Likes</span>
+        {% endwith %}
+      </div>
+      <div class="stat">
+        <ion-icon name="chatbox"></ion-icon>
+        {% with last_like=scrapped_result.num_comments|last %}
+        <span>{{ last_like.value}} Comments</span>
+        {% endwith %}
+      </div>
+      <div class="stat">
+        <ion-icon name="share-social"></ion-icon>
+        {% with last_like=scrapped_result.shares|last %}
+        <span>{{ last_like.value}} Shares</span>
+        {% endwith %}
+      </div>
+    </div>
+  </div>
+  <div class="">
+    <div class="additional-label">
+      Additional Information
+    </div>
+    <div class="form-field">
+
+      <div class="form-field">
+        <label for="likes">User ID:</label>
+        <input type="text" disabled value="{{scrapped_result.user_id}}" />
+      </div>
+      <div class="form-field">
+        <label for="likes">Post ID:</label>
+        <input type="text" disabled value="{{scrapped_result.post_id}}" />
+      </div>
+
+      <div class="form-field">
+        <label for="likes">Content Type:</label>
+        <input type="text" disabled value="{{scrapped_result.content_type}}" />
+      </div>
+      <div class="form-field">
+        <label for="likes">Content:</label>
+        <input type="text" disabled value="{{scrapped_result.content}}"></input>
+      </div>
+      <div class="form-field">
+        <label for="likes">Frequency In Seconds:</label>
+        <input type="text" disabled value="{{scrapped_result.frequency}}" />
+      </div>
+      <div class="form-field">
+        <label for="likes">Generated Index ID:</label>
+        <input type="text" disabled value="{{scrapped_result.generated_index}}" />
+      </div>
+
+    </div>
+  </div>
+
+  {% if scrapped_result%}<a class="save-button" href="{% url 'save_post' post_id=scrapped_result.user_provided_id %}">
+    Save Post</a>{% endif %}
+</div>
+{% endif %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById("tpContainer").style.display = "none";
+    document.getElementById("searchContainer").style.display = "none";
+  });
+
+  document.getElementById('platform').addEventListener('change', function () {
+    var selectedPlatform = this.value;
+    var linkedinField = document.getElementById('linkedin-field');
+
+    if (selectedPlatform === 'LinkedIn') {
+      linkedinField.style.display = 'block';  // Show the LinkedIn username field
+      linkedinField.querySelector('input').required = true;  // Make the field required
+    } else {
+      linkedinField.style.display = 'none';  // Hide the LinkedIn username field
+      linkedinField.querySelector('input').required = false;  // Make the field not required
+    }
+  });
+
+</script>
+{% endblock %}

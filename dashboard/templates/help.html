@@ -1,0 +1,202 @@
+{% extends 'dashbase.html' %} {% block content %}
+<div class="help-container">
+  <div class="title">Social Listener Features</div>
+  <div>
+    <div class="doc">
+      <div class="doc_content" style="padding-left: 20px">
+        <ul>
+          <li><a href="#post-page" style="color: black;">Post Page</a></li>
+          <li><a href="#post-detail" style="color: black;">Post Detail View Page</a></li>
+          <li><a href="#new-post" style="color: black;">New Post to Track</a></li>
+          <li><a href="#add-entry" style="color: black;">Add entry Manually</a></li>
+          <li><a href="#edit-post" style="color: black;">Edit entry Manually</a></li>
+        </ul>
+      </div>
+      <div class="doc_body">
+        <div class="page">
+          <h3 style="margin-top: 40px; margin-left: 0px !important">Post Page</h3>
+          <div class="page-description" id="post-page">
+            <p>
+              All Social Media posts which are being tracked would be shown here.
+            </p>
+            <p>
+              User can also filter or search posts based upon different filters
+              i.e. username, likes, post date etc.
+            </p>
+            <p>Searching Metrics:</p>
+            <dl style="padding-left: 20px">
+              <ol type="1">
+                <li>
+                  <dt style="font-weight: 700;">Usernames:</dt>
+                  <dd>
+                    A user can easily filter out the posts based upon the
+                    username. The powerful search engine also allows the user to
+                    search posts from multiple users at the same time using comma
+                    separated values.
+                  </dd>
+                </li>
+                <li>
+                  <dt style="font-weight: 700;">Number of likes:</dt>
+                  <dd>
+                    Posts can also be categorized based upon the number of likes.
+                    One can easily provide the range of likes to filter out the
+                    posts.
+                  </dd>
+                </li>
+                <li>
+                  <dt style="font-weight: 700;">Number of comments:</dt>
+                  <dd>
+                    Number of comments can also be used to filter out the posts.
+                  </dd>
+                </li>
+                <li>
+                  <dt style="font-weight: 600;">Number of shares:</dt>
+                  <dd>
+                    Another metric is the number of shares which can be used to
+                    easily filter out the posts.
+                  </dd>
+                </li>
+
+                <li>
+                  <dt style="font-weight: 700;">Post date:</dt>
+                  <dd>
+                    Last metric is the post date which provides convinience to the
+                    user to filter out the posts based upon the post date.
+                  </dd>
+                </li>
+              </ol>
+            </dl>
+            <p>
+              Also in addition, one can use all of these filters at the same time
+              to do more robust search.
+            </p>
+
+            <p>
+              Each post displays the metrics which could be used to analyze the
+              overall engagement on any social media post. That includes the no.
+              of likes, comments, shares and overall sentiment of the comments on
+              that post.
+            </p>
+            <p>For each post, a user can have the following interactions:</p>
+            <dl>
+              <ol type="a" style="padding-left: 20px">
+                <li>
+                
+                    The user can view the post details by clicking on the post
+                  
+                </li>
+                <li>
+
+                  The user can capture the data manually for the post.It allows
+                  the user to add data manually just in case scrapper stops
+                  working or would like to enter post metadata manually on an
+                  ad-hoc basis
+                </li>
+                <li>
+                 
+                    It allows to manually edit the data for the post. For now one
+                    can edit the frequency (the time the scrapper will take to
+                    extract updated metrics).
+                  
+                </li>
+                <li>
+                  
+                    The user can delete any post from the system at any time after
+                    the confirmation.
+                 
+                </li>
+              </ol>
+            </dl>
+          </div>
+        </div>
+        <div class="page">
+          <h3 style="margin-top:40px;margin-left: 0px !important">New Post to Track</h3>
+          <div class="page-description" id="new-post">
+            <p>Here, the user can add a new post to track in the system.</p>
+            <p>
+              The user is required to provide the POST ID, Social Media platform,
+              and frequency of the scrapper to add new post in the system.
+            </p>
+            <p>
+              The system provides an additional feature to test scrapper before
+              the user add any post to track. The user can test the scrapper to
+              see if it is working fine or not.
+            </p>
+            <p>
+              A unique ID is generated with each post which could help to search
+              posts from the DB.
+            </p>
+          </div>
+        </div>
+        <div class="page">
+          <h3 style="margin-top:40px;margin-left: 0px !important">Add Entry Manually</h3>
+          <div class="page-description" id="add-entry">
+            <p>A user can also manually add data of any specific post in the system.
+              For this, the user is required to provide the following information:</p>
+            </p>
+            <p>Example:</p>
+            <ol style="padding-left: 20px">
+              <li>Number of likes</li>
+              <li>Number of shares</li>
+              <li>Comments etc</li>
+            </ol>
+          </div>
+        </div>
+        <div class="page">
+          <h3 style="margin-top:40px;margin-left: 0px !important">Edit Entry Manually</h3>
+          <div class="page-description" id="edit-post">
+            <p>
+              In the Posts page, all the available posts that are been tracked are
+              shown here.
+            </p>
+            <p>
+              The search engine is powerful in a way that one is allowed to search
+              for posts by different criteria that are connected to the post.
+            </p>
+            <p>Example:</p>
+            <ol style="padding-left: 20px">
+              <li>Usernames</li>
+              <li># of likes</li>
+              <li># of comments</li>
+              <li>date</li>
+              <li># of likes</li>
+              <li># of comments</li>
+            </ol>
+          </div>
+        </div>
+        <div class="page">
+          <h3 style="margin-top:40px;margin-left: 0px !important">Post Detail View Page</h3>
+          <div class="page-description" id="post-detail">
+            <p>The page should you:</p>
+            <ol style="padding-left: 20px">
+              <li>the date of the Post</li>
+              <li>URL to the Post</li>
+              <li>the content itself</li>
+              <li>graphs with time series</li>
+              <li>
+                the unique ID generated based on static metrics, and that would
+                serve as an index for fast search
+              </li>
+            </ol>
+            <p>Metrics shown in the graph are:</p>
+            <ol style="padding-left: 20px">
+              <li>number of likes</li>
+              <li>number of shares</li>
+              <li>number of comments</li>
+              <li>sentiment analysis of comments</li>
+              <li>media type e.g. if the Post is an image/video</li>
+              <li>Post’s longevity e.g. time it took for the post to “die”</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById("tpContainer").style.display = "none";
+    document.getElementById("searchContainer").style.display = "none";
+  });
+</script>
+{% endblock %}
