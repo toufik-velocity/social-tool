@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
 
     'authentication',
     'dashboard',
@@ -55,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -87,18 +85,29 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+
+uri = "mongodb+srv://samuelnjiiri625:bxGZHy4JTMin1I7x@cluster0.guctpja.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
+# Create a new client and connect to the server
+client = MongoClient(uri, server_api=ServerApi('1'))
+
+# Send a ping to confirm a successful connection
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
+
 DATABASES = {
-    'default': {
+    "default": {
         'ENGINE': 'djongo',
-        'NAME': os.getenv('DB'),
-    }
-}
-
-
-MONGODB_DATABASES = {
-    'default': {
-        'name': os.getenv('DB'),
-        'host': f"{os.getenv('CLIENT')}{os.getenv('DB')}",
+        'CLIENT': {
+            "host": uri,
+            "name": "SocialListening",
+            "authMechanism": "SCRAM-SHA-1" # For atlas cloud db
+        }
     }
 }
 
