@@ -87,10 +87,10 @@ AUTH_USER_MODEL = 'authentication.MyUser'
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-uri = "mongodb+srv://samuelnjiiri625:bxGZHy4JTMin1I7x@cluster0.guctpja.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
+url = os.getenv('CLIENT')
+print(url)
 # Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
+client = MongoClient(url, server_api=ServerApi('1'))
 
 # Send a ping to confirm a successful connection
 try:
@@ -99,13 +99,14 @@ try:
 except Exception as e:
     print(e)
 
+
 DATABASES = {
     "default": {
         'ENGINE': 'djongo',
         'ENFORCE_SCHEMA': True,
         'CLIENT': {
-            "host": uri,
-            "name": "SocialListening",
+            "host": os.getenv('CLIENT'),
+            "name": os.getenv('DB'),
             "authMechanism": "SCRAM-SHA-1" # For atlas cloud db
         }
     }
