@@ -149,32 +149,32 @@
                     <span>{{post.username}}</span>
                   </div>
                   <div class="tpPlatformIcon">
-                    {%if post.platform_id == '1' %}<ion-icon
+                    {%if post.platform.name == 'Facebook' %}<ion-icon
                       class="logo-icon"
                       name="logo-facebook"
                       style="color: #3b5998"
                     ></ion-icon>
-                    {% elif post.platform_id == '2' %}<ion-icon
+                    {% elif post.platform.name == 'Twitter' %}<ion-icon
                       class="logo-icon"
                       name="logo-twitter"
                       style="color: #00acee"
                     ></ion-icon>
-                    {% elif post.platform_id == '3' %}<ion-icon
+                    {% elif post.platform.name == 'LinkedIn' %}<ion-icon
                       class="logo-icon"
                       name="logo-linkedin"
                       style="color: #0e76a8"
                     ></ion-icon>
-                    {% elif post.platform_id == '4' %}<ion-icon
+                    {% elif post.platform.name == 'TikTok' %}<ion-icon
                     class="logo-icon"
                     name="logo-tiktok"
                     style="color: #01080B"
                   ></ion-icon>
-                  {% elif post.platform_id == '5' %}<ion-icon
+                  {% elif post.platform.name == 'Instagram' %}<ion-icon
                       class="logo-icon"
                       name="logo-instagram"
                       style="color: #EC9B5F"
                     ></ion-icon>
-                    {% elif post.platform_id == '6' %}<ion-icon
+                    {% elif post.platform.name == 'Youtube' %}<ion-icon
                       class="logo-icon"
                       name="logo-youtube"
                       style="color: #FF5733"

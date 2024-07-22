@@ -4,28 +4,28 @@
 <div class="detail-container">
     <div class="topRow">
         <div class="platform">
-            <span> {%if result.platform_id == '1' %}<ion-icon class="logo-icon" name="logo-facebook"
+            <span> {%if result.platform.name == 'Facebook' %}<ion-icon class="logo-icon" name="logo-facebook"
                     style="color: #3b5998"></ion-icon>
-                {% elif result.platform_id == '2' %}<ion-icon class="logo-icon" name="logo-twitter"
+                {% elif result.platform.name == 'Twitter' %}<ion-icon class="logo-icon" name="logo-twitter"
                     style="color: #00acee"></ion-icon>
-                {% elif result.platform_id == '3' %}<ion-icon class="logo-icon" name="logo-linkedin"
+                {% elif result.platform.name == 'LinkedIn' %}<ion-icon class="logo-icon" name="logo-linkedin"
                     style="color: #0e76a8"></ion-icon>
-                {% elif result.platform_id == '4' %}<ion-icon class="logo-icon" name="logo-tiktok"
+                {% elif result.platform.name == 'TikTok' %}<ion-icon class="logo-icon" name="logo-tiktok"
                 style="color: #01080B"></ion-icon>
-                {% elif result.platform_id == '5' %}<ion-icon class="logo-icon" name="logo-instagram"
+                {% elif result.platform.name == 'Instagram' %}<ion-icon class="logo-icon" name="logo-instagram"
                     style="color: #EC9B5F"></ion-icon>
-                {% elif result.platform_id == '6' %}<ion-icon class="logo-icon" name="logo-youtube"
+                {% elif result.platform.name == 'Youtube' %}<ion-icon class="logo-icon" name="logo-youtube"
                     style="color: #FF5733"></ion-icon>
                 {% else %}
                 {% endif %}</span>
             <div class="pfName">
                 <span> 
-                    {%if result.platform_id == '1' %}Facebook Post
-                    {% elif result.platform_id == '2' %}Twitter Post
-                    {% elif result.platform_id == '3' %}LinkedIn Post
-                    {% elif result.platform_id == '4' %}TikTok Post
-                    {% elif result.platform_id == '5' %}Instagram Post
-                    {% elif result.platform_id == '6' %}Youtube Post
+                    {%if result.platform.name == 'Facebook' %}Facebook Post
+                    {% elif result.platform.name == 'Twitter' %}Twitter Post
+                    {% elif result.platform.name == 'LinkedIn' %}LinkedIn Post
+                    {% elif result.platform.name == 'TikTok' %}TikTok Post
+                    {% elif result.platform.name == 'Instagram' %}Instagram Post
+                    {% elif result.platform.name == 'Youtube' %}Youtube Post
                     {% else %}
                     {% endif %}
                 </span>
@@ -73,7 +73,7 @@
                     Update Frequency:
                 </span>
                 <span>
-                    Every {{frequency}} hours
+                    Every {{result.frequency}} hours
                 </span>
             </div>
             <div class="d-date-updated">
