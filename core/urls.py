@@ -20,7 +20,7 @@ from dashboard.encrypt_url import urlEncryption, urlEncoding
 from authentication.views import signin
 
 urlpatterns = [
-    path(f"{urlEncryption('admin')}{urlEncoding('admin')}/", admin.site.urls),
+    path("admin/", admin.site.urls),
     path('', signin, name='signin'),
     path(f"{urlEncryption('authentication')}{urlEncoding('authentication')}/", include('authentication.urls')),
     path(f"{urlEncryption('dashboard')}{urlEncoding('dashboard')}/", include('dashboard.urls')),    

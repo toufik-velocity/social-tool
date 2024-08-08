@@ -478,46 +478,113 @@ def graphAnalysis(request, post_id):
         post = Post.objects.get(post_id=post_id)
     except Post.DoesNotExist:
         return JsonResponse({'error': 'Post not found'}, status=404)
+    
+    # Likes anaylsis
+    likes = post.likes
+    # likes_list = [0]
+    likes_list = []
+    likes_timeframes = []
+    likes_growth_rates_list = [0]
+    likes_growth_rates = []
+    likes_first_time = likes[0]['timestamp']
 
-    def process_metrics(metrics):
-        metrics = sorted(metrics, key=lambda x: parse_datetime(str(x['timestamp'])))
-        values, timeframes, growth_rates = [], [], [0]
-        for i in range(1, len(metrics)):
-            old_value = metrics[i - 1]['value']
-            new_value = metrics[i]['value']
-            timestamp = metrics[i]['timestamp']
-            growth_rate = round(((new_value - old_value) / old_value) * 100, 2) if old_value != 0 else 0
-            growth_rates.append(growth_rate)
-            values.append(new_value)
-            timeframes.append(timestamp)
-        return values, timeframes, growth_rates
+    for like in likes:
+        likes_list.append(like['value'])
+        likes_first_time = like['timestamp']
+        likes_timeframes.append(likes_first_time)
 
-    # Process likes
-    likes_list, likes_timeframes, likes_growth_rates_list = process_metrics(post.likes)
+    for data in likes:
+        data['timestamp'] = parse_datetime(str(data['timestamp']))
 
-    # Update likes growth rates in the database
-    post.likes_growth_rates = [{'growth_rate': gr, 'timestamp': tf} for gr, tf in zip(likes_growth_rates_list, likes_timeframes)]
-    post.save()
+    likes.sort(key=lambda x: x['timestamp'])
+    for i in range(1, len(likes)):
+        old_value = likes[i - 1]['value']
+        new_value = likes[i]['value']
+        timestamp = likes[i]['timestamp']
 
-    # Process shares
-    shares_list, shares_timeframes, shares_growth_rates_list = process_metrics(post.shares)
+        if old_value != 0:
+            growth_rate = round(((new_value - old_value) / old_value) * 100, 2)
+        else:
+            growth_rate = 0
 
-    # Update shares growth rates in the database
-    post.shares_growth_rates = [{'growth_rate': gr, 'timestamp': tf} for gr, tf in zip(shares_growth_rates_list, shares_timeframes)]
-    post.save()
+        likes_growth_rates.append(
+            {"growth_rate": growth_rate, "timestamp": timestamp})
 
-    # Process number of comments
-    num_comments_list, num_comments_timeframes, num_comments_growth_rates_list = process_metrics(post.num_comments)
+        post.likes_growth_rates = likes_growth_rates
 
-    # Update number of comments growth rates in the database
-    post.num_comments_growth_rates = [{'growth_rate': gr, 'timestamp': tf} for gr, tf in zip(num_comments_growth_rates_list, num_comments_timeframes)]
-    post.save()
+        likes_growth_rates_list.append(growth_rate)
+
+    # Shares anaylsis
+    shares = post.shares
+    shares_growth_rates_list = [0]
+    shares_growth_rates = []
+    shares_first_time = shares[0]['timestamp']
+    shares_list = []
+    shares_timeframes = []
+
+    for share in shares:
+        shares_list.append(share['value'])
+        shares_first_time = share['timestamp']
+        shares_timeframes.append(shares_first_time)
+
+    for data in shares:
+        data['timestamp'] = parse_datetime(str(data['timestamp']))
+
+    shares.sort(key=lambda x: x['timestamp'])
+    for i in range(1, len(shares)):
+        old_value = shares[i - 1]['value']
+        new_value = shares[i]['value']
+        timestamp = shares[i]['timestamp']
+
+        if old_value != 0:
+            growth_rate = round((new_value - old_value) / old_value * 100, 2)
+        else:
+            growth_rate = 0
+
+        shares_growth_rates.append(
+            {"growth_rate": growth_rate, "timestamp": timestamp})
+        
+        post.shares_growth_rates = shares_growth_rates
+        shares_growth_rates_list.append(growth_rate)
+
+    # Number comments anaylsis
+    num_comments = post.num_comments
+    num_comments_growth_rates_list = [0]
+    num_comments_growth_rates = []
+    num_comments_list = []
+    num_comments_timeframes = []
+    num_comments_first_time = num_comments[0]['timestamp']
+
+    for num_comment in num_comments:
+        num_comments_list.append(num_comment['value'])
+        num_comments_first_time = num_comment['timestamp']
+        num_comments_timeframes.append(num_comments_first_time)
+
+    for data in num_comments:
+        data['timestamp'] = parse_datetime(str(data['timestamp']))
+
+    num_comments.sort(key=lambda x: x['timestamp'])
+    for i in range(1, len(num_comments)):
+        old_value = num_comments[i - 1]['value']
+        new_value = num_comments[i]['value']
+        timestamp = num_comments[i]['timestamp']
+
+        if old_value != 0:
+            growth_rate = round((new_value - old_value) / old_value * 100, 2)
+        else:
+            growth_rate = 0
+        num_comments_growth_rates.append(
+            {"growth_rate": growth_rate, "timestamp": timestamp})
+        
+        post.num_comments_growth_rates = num_comments_growth_rates
+        post.save()
+        num_comments_growth_rates_list.append(growth_rate)
 
     # Sentiments
     positive_score = post.positive_score
-    neutral_score = post.neutral_score
     bad_score = post.bad_score
-    sentiment_analysis = [positive_score, neutral_score, bad_score]
+    neutral_score = post.neutral_score
+    sentiment_anaylsis = [positive_score, neutral_score, bad_score]
 
     whole_data = {
         'likes_list': likes_list,
@@ -529,11 +596,12 @@ def graphAnalysis(request, post_id):
         'num_comments_list': num_comments_list,
         'num_comments_timeframes': num_comments_timeframes,
         'num_comments_growth_rates_list': num_comments_growth_rates_list,
-        'sentiment_analysis': sentiment_analysis,
+        'sentiment_anaylsis': sentiment_anaylsis,
     }
-
+    print(whole_data)
+    
     return JsonResponse(whole_data)
-
+    
 def help(request):
     return render(request, 'help.html')
 
