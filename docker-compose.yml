@@ -1,12 +1,16 @@
 version: '3'
 services:
-  mongodb:
-    image: mongodb/mongodb-community-server:latest
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: SocialListening
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password123
     ports:
-      - 27017:27017
+      - 5432:5432
     volumes:
-      - mongodbdata:/data/db
-    
+      - postgresdata:/var/lib/postgresql/data
+
   webapp:
     build: .
     command: python3 manage.py runserver 0.0.0.0:8000
@@ -15,7 +19,7 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      - mongodb
+      - postgres
 
 volumes:
-  mongodbdata:
+  postgresdata:

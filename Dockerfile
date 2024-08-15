@@ -1,20 +1,16 @@
-FROM python:3.9-alpine3.13
+FROM python:latest
 
 ENV PYTHONDONTWRITEBYTECODE 1
-
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /site
 
-COPY requirements.txt requirements.txt
+COPY requirements.txt .
 
-RUN python -m venv /py && \
-    /py/bin/pip install --upgrade pip && \
-    /py/bin/pip install -r requirements.txt --index-url=https://pypi.python.org/simple/ && \
-    adduser --disabled-password --no-create-home app
-
-ENV PATH="/py/bin:$PATH"
-
-USER app
+RUN python -m venv .venv && \
+    .venv/bin/pip install --upgrade pip && \
+    .venv/bin/pip install -r requirements.txt 
+    
+ENV PATH=".venv/bin:$PATH"
 
 COPY . .
